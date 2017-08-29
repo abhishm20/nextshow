@@ -1,0 +1,1 @@
+* * * * * export MOJO_SERVER='prod' && cd /home/ubuntu/posov5-apis && echo "from utility import scheduler" | python manage.py shell

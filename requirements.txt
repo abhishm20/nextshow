@@ -1,0 +1,12 @@
+CacheControl==0.12.3
+certifi==2017.7.27.1
+chardet==3.0.4
+Django==1.11.4
+djangorestframework==3.6.4
+idna==2.6
+lockfile==0.12.2
+msgpack-python==0.4.8
+pytz==2017.2
+requests==2.18.4
+six==1.10.0
+urllib3==1.22
