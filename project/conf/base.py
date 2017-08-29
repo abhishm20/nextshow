@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'movie_buzz',
+        'NAME': 'nextshow',
         'USER': 'root',
         'PASSWORD': 'ainaa',
         'HOST': '127.0.0.1',
