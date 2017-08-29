@@ -7,7 +7,6 @@ __pycache__/
 
 .idea/*
 .env/*
-log/*
 # C extensions
 *.so
 
