@@ -13,7 +13,7 @@ def sync_db():
     for id in imdb_ids:
         try:
             logging.getLogger('debug').debug("Processing... %s" % id.imdb_id)
-            title = imdb.get_title_by_id('tt0468569').__dict__
+            title = imdb.get_title_by_id(id.imdb_id).__dict__
             saved_title = Title.objects.filter(imdb_id=title['imdb_id'])
             if not saved_title.exists():
                 title_instance = Title.objects.create(imdb_id=title['imdb_id'], name=title['title'])
