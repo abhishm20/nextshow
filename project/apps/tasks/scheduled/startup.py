@@ -85,8 +85,9 @@ def sync_db():
                         person_instance = Person.objects.create(imdb_id=person['imdb_id'])
                         person_data = {'name': person['name'], 'job': person['job'], 'attr': person['attr'], 'photo_url': person['photo_url']}
                         Person.objects.filter(id=person_instance.id).update(**person_data)
-                    credit, created = Credit.objects.get_or_create(person=person_instance, title=title_instance)
-                    Credit.objects.filter(id=credit.id).update(rank=rank+1, job=person['token'])
+                    credit = Credit.objects.filter(person=person_instance, title=title_instance)
+                    if not credit.exists():
+                        Credit.objects.create(person=person_instance, title=title_instance, rank=rank+1, job=person['token'])
                     for rank,role in enumerate(person['roles']):
                         Role.objects.create(credit=credit, rank=rank+1, name=role)
 
