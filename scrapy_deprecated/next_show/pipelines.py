@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import sqlite3 as lite
+import os
 from datetime import datetime
 
-from settings import DB_NAME
+from settings import DB_PATH
 
 
 class Pipeline(object):
@@ -13,7 +14,7 @@ class Pipeline(object):
         self.create_tables()
 
     def setup_connection(self):
-        self.connection = lite.connect(DB_NAME)
+        self.connection = lite.connect(DB_PATH)
         self.cursor = self.connection.cursor()
 
     def create_tables(self):

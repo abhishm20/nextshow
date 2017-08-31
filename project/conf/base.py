@@ -159,5 +159,3 @@ MEDIA_URL = '/media/'
 # DEFAULT_FILE_STORAGE = 'django_s3_storage.storage.S3Storage'
 # STATICFILES_STORAGE = 'django_s3_storage.storage.StaticS3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
-

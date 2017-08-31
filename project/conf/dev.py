@@ -1,26 +1,3 @@
-# Client sercet key
-CLIENT_SECRET_KEY = '512c6081e28acca197ba6de0c590875f'
-
-# VALIDATION Service
-VALIDATION = True
-
-# HTTP loggin service
-HTTP_LOGGING_SERVICE = False
-
-# Session service
-SESSION_ACTIVE = False
-
-# Push notification service
-PUSH_NOTIFICATION_SERVICE = False
-
-# SMS
-SMS_SERVICE_ENABLED = False
-
-#
-MAIL_SERVICE_ENABLED = False
-
-# GCM SECRET
-GCM_NOTIFICATION_SECRET = '0eb9ee78e3d9bb23ffb1a105a4accefe7166af85a171e54c33a9afb3c590f597'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -54,32 +31,35 @@ LOGGING = {
         },
     },
     'handlers': {
-        'console': {
+        'app': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'verbose'
         },
         'debug': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'log/debug.log',
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
         'error': {
             'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': 'log/error.log',
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose'
-        }
+        },
+
     },
     'loggers': {
-        'custom': {
-            'handlers': ['console'],
+        'django.db.backends': {
+            'handlers': ['app'],
             'level': 'DEBUG'
         },
-        'django.db.backends': {
-            'level': 'WARNING',
-            'handlers': ['console'],
+        'debug': {
+            'handlers': ['debug'],
+            'level': 'DEBUG'
+        },
+        'error': {
+            'handlers': ['error'],
+            'level': 'ERROR'
         }
     }
 }

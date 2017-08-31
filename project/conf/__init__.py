@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from .base import *
 
 try:
-    if os.environ['MOJO_SERVER'] == 'prod':
+    if os.environ['ENV'] == 'prod':
         ENV = 'prod'
         from .prod import *
     else:

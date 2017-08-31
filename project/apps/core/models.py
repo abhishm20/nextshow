@@ -4,20 +4,42 @@ from django.db import models
 import util
 
 
+class IMDB(models.Model):
+    imdb_id = models.CharField(max_length=50, null=False, unique=True, blank=False, db_index=True)
+    is_used = models.BooleanField(default=0)
+    created_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "IMDB"
+        verbose_name_plural = "IMDB"
+        ordering = ('imdb_id', 'created_at',)
+
+    def __repr__(self):
+        return '<IMDB: {0}>'.format(repr(self.imdb_id))
+
+    def __unicode__(self):
+        return '<IMDB: {0}>'.format(repr(self.imdb_id))
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created_at = util.current_time()
+        return super(IMDB, self).save(*args, **kwargs)
+
+
 class Title(models.Model):
     imdb_id = models.CharField(max_length=50, null=False, blank=False, unique=True, db_index=True)
     name = models.CharField(max_length=200, null=False, blank=False, db_index=True)
-    type = models.CharField(max_length=50, null=False, blank=False)
+    type = models.CharField(max_length=50, null=True, blank=True)
     year = models.CharField(max_length=5, null=True, blank=True)
-    tagline = models.TextField(max_length=200, null=True, blank=True)
-    plot_outline = models.TextField(max_length=200, null=True, blank=True)
-    rating = models.FloatField(default=0, null=False, blank=True)
-    votes = models.BigIntegerField(default=0, null=False, blank=True)
-    runtime = models.BigIntegerField(default=0, null=False, blank=True)
-    poster_url = models.TextField(max_length=200, null=True, blank=True)
-    cover_url = models.TextField(max_length=200, null=True, blank=True)
-    release_date = models.DateField(null=True, blank=True)
-    certification = models.CharField(max_length=5, null=True, blank=True)
+    tagline = models.TextField(max_length=500, null=True, blank=True)
+    plot_outline = models.TextField(max_length=1000, null=True, blank=True)
+    rating = models.FloatField(default=0, null=True, blank=True)
+    votes = models.BigIntegerField(default=0, null=True, blank=True)
+    runtime = models.BigIntegerField(default=0, null=True, blank=True)
+    poster_url = models.TextField(max_length=1000, null=True, blank=True)
+    cover_url = models.TextField(max_length=1000, null=True, blank=True)
+    release_date = models.CharField(max_length=20, null=True, blank=True)
+    certification = models.CharField(max_length=20, null=True, blank=True)
 
     created_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True)
@@ -43,7 +65,7 @@ class Title(models.Model):
 
 class Person(models.Model):
     imdb_id = models.CharField(max_length=200, null=False, blank=False, unique=True, db_index=True)
-    name = models.CharField(max_length=200, null=False, blank=False, db_index=True)
+    name = models.CharField(max_length=200, null=True, blank=True, db_index=True)
     photo_url = models.TextField(max_length=500, null=True, blank=True)
 
     attr = models.TextField(max_length=500, null=True, blank=True)
@@ -72,6 +94,8 @@ class Person(models.Model):
 
 class Genre(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False, unique=True, db_index=True)
+    rank = models.IntegerField(default=0)
+
     title = models.ForeignKey('core.Title', related_name='genres', related_query_name='genre')
 
     created_at = models.DateTimeField(null=True, blank=True)
@@ -96,7 +120,9 @@ class Genre(models.Model):
 
 
 class Plot(models.Model):
-    name = models.TextField(max_length=500, null=False, blank=False)
+    name = models.TextField(max_length=1000, null=False, blank=False)
+    rank = models.IntegerField(default=0)
+
     title = models.ForeignKey('core.Title', related_name='plots', related_query_name='plot', db_index=True)
 
     created_at = models.DateTimeField(null=True, blank=True)
@@ -122,6 +148,8 @@ class Plot(models.Model):
 
 class TrailorImageUrl(models.Model):
     name = models.TextField(max_length=500, null=False, blank=False)
+    rank = models.IntegerField(default=0)
+
     title = models.ForeignKey('core.Title', related_name='trailer_image_urls', related_query_name='trailer_image_url', db_index=True)
 
     created_at = models.DateTimeField(null=True, blank=True)
@@ -146,7 +174,10 @@ class TrailorImageUrl(models.Model):
 
 
 class Trailer(models.Model):
-    name = models.TextField(max_length=500, null=False, blank=False)
+    name = models.TextField(max_length=1000, null=False, blank=False)
+    format = models.CharField(max_length=200, null=True, blank=True)
+    rank = models.IntegerField(default=0)
+
     title = models.ForeignKey('core.Title', related_name='trailers', related_query_name='trailer', db_index=True)
 
     created_at = models.DateTimeField(null=True, blank=True)
@@ -230,18 +261,19 @@ class PersonImage(models.Model):
         return super(PersonImage, self).save(*args, **kwargs)
 
 
-class TitlePerson(models.Model):
+class Credit(models.Model):
     title = models.ForeignKey('core.Title', related_query_name='cast', related_name='casts', db_index=True)
     person = models.ForeignKey('core.Person', related_query_name='work', related_name='works')
 
     job = models.CharField(max_length=100, blank=False, null=False)
+    rank = models.IntegerField(default=0)
 
     created_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        verbose_name = "Title Person"
-        verbose_name_plural = "Title Persons"
+        verbose_name = "Credit"
+        verbose_name_plural = "Credit"
         ordering = ('title', 'person', 'created_at',)
 
     def __repr__(self):
@@ -254,7 +286,34 @@ class TitlePerson(models.Model):
         if not self.id:
             self.created_at = util.current_time()
         self.updated_at = util.current_time()
-        return super(TitlePerson, self).save(*args, **kwargs)
+        return super(Credit, self).save(*args, **kwargs)
+
+
+class Role(models.Model):
+    credit = models.ForeignKey('core.Credit', related_query_name='role', related_name='roles')
+
+    name = models.CharField(max_length=200, blank=False, null=False)
+    rank = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Role"
+        verbose_name_plural = "Roles"
+        ordering = ('credit', 'name', 'created_at',)
+
+    def __repr__(self):
+        return '<Role: {0} - {1}>'.format(repr(self.credit), repr(self.name))
+
+    def __unicode__(self):
+        return '<Role: {0} - {1}>'.format(repr(self.credit), repr(self.name))
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created_at = util.current_time()
+        self.updated_at = util.current_time()
+        return super(Role, self).save(*args, **kwargs)
 
 
 class Episode(models.Model):

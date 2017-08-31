@@ -7,6 +7,8 @@ __pycache__/
 
 .idea/*
 .env/*
+
+db/imdb_ids.db
 # C extensions
 *.so
 

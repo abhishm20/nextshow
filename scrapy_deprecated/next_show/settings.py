@@ -7,8 +7,10 @@
 #
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
+import os
 
 DB_NAME = 'imdb_ids.db'
+DB_PATH = os.path.join('../', 'db', DB_NAME)
 
 BOT_NAME = 'next_show'
 
@@ -25,5 +27,3 @@ ITEM_PIPELINES = {
 DOWNLOAD_TIMEOUT = 180
 
 LOG_FILE = "scrapy.log"
-# LOG_ENABLED = False
-# LOG_LEVEL = 'WARNING'
