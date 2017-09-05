@@ -17,11 +17,13 @@ def get_titles(imdb_ids):
         logging.getLogger('error').error(str(imdb_ids) + str(e), exc_info=True)
         return None
 
-count = 1
-while count < 4000000:
-    start_time = time.time()
-    for title in get_titles(["tt" + str(index).zfill(7) for index in range(count, count+9999)]):
-        run(title.__dict__)
-    count += 9999
-    logging.getLogger('debug').debug("--- %s seconds ---" % str(time.time() - start_time))
-    logging.getLogger('debug').debug("--- %s counts ---" % str(count))
+
+def run():
+    count = 1
+    while count < 4000000:
+        start_time = time.time()
+        for title in get_titles(["tt" + str(index).zfill(7) for index in range(count, count + 9999)]):
+            run(title.__dict__)
+        count += 9999
+        logging.getLogger('debug').debug("--- %s seconds ---" % str(time.time() - start_time))
+        logging.getLogger('debug').debug("--- %s counts ---" % str(count))
