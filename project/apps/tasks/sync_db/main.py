@@ -18,7 +18,7 @@ def get_titles(imdb_ids):
         return None
 
 
-def run():
+def sync():
     count = 1
     while count < 4000000:
         start_time = time.time()
