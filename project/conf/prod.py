@@ -10,6 +10,14 @@ PRODUCTION_HOST = PRODUCTION_HOST_NAME + ':' + PRODUCTION_HOST_PORT
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
     'formatters': {
         'verbose': {
             'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s %(funcName)s] %(message)s",
@@ -23,7 +31,7 @@ LOGGING = {
         'app': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'log/app.log',
+            'filename': 'log/backend.log',
             'formatter': 'verbose'
         },
         'debug': {

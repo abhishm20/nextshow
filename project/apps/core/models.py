@@ -93,7 +93,7 @@ class Person(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=100, null=False, blank=False, unique=True, db_index=True)
+    name = models.CharField(max_length=100, null=False, blank=False, db_index=True)
     rank = models.IntegerField(default=0)
 
     title = models.ForeignKey('core.Title', related_name='genres', related_query_name='genre')
