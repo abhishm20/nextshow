@@ -1,6 +1,9 @@
 
+import os
+from base import ROOT_DIR
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
 
 # Production Host
 PRODUCTION_HOST_NAME = 'http://v5.posoapp.com'
@@ -29,10 +32,11 @@ LOGGING = {
     },
     'handlers': {
         'app': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'log/backend.log',
-            'formatter': 'verbose'
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(ROOT_DIR, 'log','app.log'),
+            'maxBytes': 1024*1024*15, # 15MB
+            'backupCount': 10,
         },
         'debug': {
             'level': 'DEBUG',

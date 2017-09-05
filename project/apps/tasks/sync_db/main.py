@@ -5,32 +5,30 @@ from imdbpie import Imdb
 from process import run
 from util.decorator import timeit
 
-concurrent = 2
-imdb = Imdb()  # to proxy requests
+imdb = Imdb(anonymize=True)  # to proxy requests
 
 
 @timeit
-def get_titles(imdb_ids):
+def get_title(imdb_id):
     try:
-        titles = imdb.get_title_by_ids(imdb_ids)
-        return titles
+        title = imdb.get_title_by_id(imdb_id)
+        return title
     except Exception as e:
-        logging.getLogger('error').error(str(imdb_ids) + str(e), exc_info=True)
+        logging.getLogger('error').error(str(imdb_id) + str(e), exc_info=True)
         return None
 
 
 def sync():
     count = 1
-    period = 999
-    while count < 4000000:
+    while count < 9999999:
         start_time = time.time()
-        for title in get_titles(["tt" + str(index).zfill(7) for index in range(count, count + period)]):
-            try:
-                if title:
-                    run(title.__dict__)
-            except Exception as e:
-                logging.getLogger('error').error(str(e))
-                continue
-        count += period
+        title = get_title("tt" + str(count).zfill(7))
+        try:
+            if title:
+                run(title.__dict__)
+        except Exception as e:
+            logging.getLogger('error').error(str(e))
+            continue
+        count += 1
         logging.getLogger('debug').debug("--- %s seconds ---" % str(time.time() - start_time))
         logging.getLogger('debug').debug("--- %s counts ---" % str(count))
