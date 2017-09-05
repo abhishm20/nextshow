@@ -56,7 +56,6 @@ class Imdb(object):
                 continue
 
             if title.get('error') or title is None or self._is_redirection_result(title):
-                titles.append(None)
                 continue
 
             title = Title(data=title['data'])

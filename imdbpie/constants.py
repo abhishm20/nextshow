@@ -65,4 +65,4 @@ USER_AGENTS = (
     'Mozilla/5.0(iPhone;U;CPUiPhoneOS4_0likeMacOSX;en-us)AppleWebKit/532.9(KHT'
     'ML,likeGecko)Version/4.0.5Mobile/8A293Safari/6531.22.7'
 )
-DEFAULT_PROXY_URI = 'http://openwebproxy.pw/browse.php?u={0}'
+DEFAULT_PROXY_URI = 'https://nl.hideproxy.me/go.php?u={0}'
